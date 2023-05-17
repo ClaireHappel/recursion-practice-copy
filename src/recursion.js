@@ -4,14 +4,35 @@
 // denoted by n!, is the product of all positive integers less than or equal to n.
 // Example:  5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5);  // 120
+//if n is a negative number or 0
+
 var factorial = function(n) {
+  //base 
+  if (n === 1 || n === 0) {
+    return 1;
+  } 
+
+  if (n < 0) {
+    return null;
+  }
+  
+  //recursion
+  return n * factorial(n - 1);
  
 };
 
 // 2. Compute the sum of an array of integers.
 // Example:  sum([1, 2, 3, 4, 5, 6]);  // 21
-var sum = function(array) {
-};
+
+var sum = function(array, num=0) {
+  //base
+  if (array.length === 0) {
+    return num;
+  }
+  //recursion
+ num += array[0];
+   return sum(array.slice(1), num);
+ };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
@@ -20,18 +41,118 @@ var arraySum = function(array) {
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+
+  //if n is less than 0
+  if(n < 0) {
+    //if n is -2 
+    if (n === -2) {
+       //return true
+       return true;
+     //else if n is -1
+     } else if (n === -1) {
+       //return false
+       return false;
+     //if it is neither -2 or -1
+     } else {
+       //use recursion to call the function again with n + 2
+       return isEven(n + 2);
+     }
+  //else if n is greater than or equal to 0
+  } else if (n >= 0) {
+     //if n is equal to 0
+     if (n === 0) {
+        //return true
+        return true;
+     //else if n is 1
+     } else if (n === 1) {
+       //return false
+       return false;
+     //if it is neither 0 or 1
+     } else {
+       //use recursion to call the function again with n - 2
+       return isEven(n - 2);
+     }
+  }
+  
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
+
+//I: a number
+//O: sum all of integers below the given integer
 var sumBelow = function(n) {
+  //if n is greater than 0
+  if (n > 0) {
+    //base
+    //if n is 1
+    if (n === 1) {
+      //return n minus 1
+      return n - 1;
+    }  
+    //recursion
+    //return n minus one added to the result of the function called again with one subtracted from n
+    return n - 1 + sumBelow(n - 1);
+    
+  //else if base is less than 0
+  } else if (n < 0){
+    //if n is -1
+    if (n === -1) {
+      //return n plus one
+      return n + 1;
+    }  
+    //recursion
+    //return n plus one added to the result of the function called again with one added to n
+    return n + 1 + sumBelow(n + 1);
+
+  } else {
+    return 0;
+  }
 };
+
 
 // 6. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
+
+//I: two numbers
+//O: an array of numbers not including the two numbers
 var range = function(x, y) {
+
+  //if x minus y is equal to one (meaning no numbers would be included since range is excluding the start and stop values) OR if x - y is equal to 0, meaning no range exists because the values are the same value
+  if (x - y === 1 || x - y === 0) {
+    //return an empty array reflecting the absent value
+    return [];
+  }
+
+  //if x is greater than y
+  if (x > y) {
+    //base
+    //if x is strictly equal to y plus 1 (aka the last value y can return a defined value)
+    if (x === y + 1) {
+      //return an empty array, since we are excluding the last value
+      return [];
+    }
+    
+    //recursion
+    //return an array containing x + 1 (excluding the first value of x). add this array to all other arrays created from running range again with x and y, adding one to x until base case is reached
+    return [x - 1].concat(range (x - 1, y));
+
+    //else y is greater than x
+  } else {
+      //base
+      //if y is strictly equal to x plus 1 (aka the last value y can return a defined value)
+      if (x === y - 1) {
+        //return an empty array, since we are excluding the last value
+        return [];
+      }
+      //recursion
+      //return an array containing y - 1 (excluding the first value of y). add this array to all other arrays created from running range again with x and y, subtracting one from y until base case is reached
+      return [x + 1].concat(range(x + 1, y));
+  }
 };
+
+
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
@@ -39,6 +160,37 @@ var range = function(x, y) {
 // Example:  exponent(4,3);  // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+
+  //if exp is 0
+  if (exp === 0) {
+    //return 1
+    return 1;
+  }
+
+  //if exp is 1
+  if (exp === 1) {
+    //return the base
+    return base;
+  }
+
+  //else if it is positive
+  if (exp >= 0) {
+    //base
+    if (exp === 1) {
+    return base
+    }
+    //recursion
+    return base * exponent(base, exp - 1);
+      //if exponent is negative
+  } else {    
+    //base
+     if (exp === -1) {
+       return 1/base;
+     }
+    //recursion
+    return 1/base * exponent(base, exp + 1);
+  }
+  
 };
 
 // 8. Determine if a number is a power of two.
@@ -68,6 +220,9 @@ var modulo = function(x, y) {
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
 // ATTENTION DO NOT LEAVE COMMENTS IN THIS FUNCTION. The test is looking for any ('/').
+
+//what is the process of multiplication broken down?
+//multiply(2, 4) => 2 + 2 + 2 + 2
 var multiply = function(x, y) {
 };
 
